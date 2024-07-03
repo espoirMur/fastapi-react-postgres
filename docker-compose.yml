@@ -1,19 +1,32 @@
 version: '3.7'
 services: 
-    docker-fastapi:
-        container_name: docker-fastapi
+    fastapi:
+        container_name: fastapi
         build: 
             context: ./app/
             dockerfile: Dockerfile
         restart: always
+        ports: 
+            - "8000:8000"
+        env_file:
+          - .env
     nginx:
         depends_on: 
-            - docker-fastapi
+            - fastapi
         container_name: proxy-app
         build: 
-            context: ./ui/
+            context: ./front-end/
             dockerfile: Dockerfile
         ports: 
             - "80:80"
         restart: always
-        
+    postgres:
+        image: postgres:latest
+        container_name: postgres
+        env_file:
+          - .env
+        volumes:
+          - postgres_data:/var/lib/postgresql/data
+          - ./init-db:/docker-entrypoint-initdb.d
+volumes:
+  postgres_data:
