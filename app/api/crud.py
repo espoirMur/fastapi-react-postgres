@@ -1,7 +1,6 @@
 from sqlalchemy.orm import Session
 from api.models import User
-from api.schemas import User as UserSchema
-from typing import List 
+from typing import List
 
 
 class UserManager:
